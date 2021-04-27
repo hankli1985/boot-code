@@ -15,13 +15,13 @@ spring:
         password: myesb
         driver-class-name: com.mysql.cj.jdbc.Driver
         # driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://10.68.15.8:3306/myesb?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2b8
-      mesplat:
-        url: jdbc:oracle:thin:@10.68.15.7:1521/mesplat
-        username: mesif
-        password: mesif
-        # driver-class-name: oracle.jdbc.driver.OracleDriver
-        driver-class-name: oracle.jdbc.OracleDriver
+        url: jdbc:mysql://localhost:3306/myesb?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2b8
+      # mesplat:
+      #   url: jdbc:oracle:thin:localhost:1521/mesplat
+      #   username: mesif
+      #   password: mesif
+      # driver-class-name: oracle.jdbc.driver.OracleDriver
+      # driver-class-name: oracle.jdbc.OracleDriver
     # dynamic:
     #   primary: esb #设置默认的数据源或者数据源组,默认值即为master
     #   #lazy: false #默认立即初始化数据源，true则支持在需要建立连接时再初始化数据源

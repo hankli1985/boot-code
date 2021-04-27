@@ -1,0 +1,89 @@
+import * as base from '/js/cols.base.js';
+export const ifGroupCols = [
+  {
+    ...base.index,
+  },
+  {
+    ...base.id,
+  },
+  {
+    ...base.groupCode,
+  },
+  {
+    ...base.groupName,
+  },
+  {
+    ...base.toSysName,
+  },
+  {
+    ...base.serviceType,
+  },
+  {
+    ...base.serviceTypeTitle,
+  },
+  {
+    ...base.serviceClass,
+  },
+  {
+    ...base.receiveTransactionType,
+  },
+  {
+    ...base.receiveTransactionTypeTitle,
+  },
+  {
+    ...base.receiveDeleteFlag,
+  },
+  {
+    ...base.sendSuccessFlag,
+  },
+  {
+    ...base.dbProc,
+  },
+  {
+    ...base.creatTime,
+  },
+  {
+    ...base.updateTime,
+  },
+  {
+    toolbar: '#tool',
+    title: '操作',
+    width: 180,
+  },
+];
+export const ifGroupParamCols = [
+  {
+    ...base.index,
+  },
+  {
+    ...base.groupCode,
+  },
+  {
+    ...base.toSysName,
+  },
+  {
+    ...base.paramGroup,
+  },
+  {
+    ...base.paramCode,
+  },
+  {
+    ...base.paramName,
+  },
+  {
+    ...base.paramValue,
+  },
+  {
+    ...base.editAble,
+  },
+  {
+    ...base.creatTime,
+  },
+  {
+    ...base.updateTime,
+  },
+  {
+    toolbar: '#paramtool',
+    title: '操作',
+  },
+];

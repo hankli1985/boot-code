@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bjev.esb.mapper.localdb.BdBuesinessTypeMapper">
+
+  <!-- 可根据自己的需求，是否要使用 -->
+  <resultMap type="com.bjev.esb.entity.BdBuesinessTypeEntity" id="bdBuesinessTypeMap">
+    <result property="businessId" column="business_id" />
+    <result property="businessName" column="business_name" />
+    <result property="businessMonth" column="business_month" />
+  </resultMap>
+
+
+</mapper>

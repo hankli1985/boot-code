@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/custom.form.css" />
+  </head>
+  <body>
+    <div class="panel panel-default data_form">
+      <div class="panel-heading title"></div>
+      <form class="layui-form layui-form-pane" lay-filter="dataform" style="width: 700px; margin: 5px">
+        <input name="id" hidden />
+        <div class="layui-form-item">
+          <label class="layui-form-label">接口代码</label>
+          <div class="layui-input-block">
+            <input type="text" name="groupCode" placeholder="请输入接口代码" autocomplete="off" class="layui-input" lay-verify="required" lay-reqtext="接口代码是必填项，岂能为空？" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">接口名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="groupName" placeholder="请输入接口名称" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item" hidden>
+          <label class="layui-form-label">接口名称_zh</label>
+          <div class="layui-input-block">
+            <input type="text" name="groupNameZh" placeholder="请输入接口名称" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">对方系统</label>
+          <div class="layui-input-block">
+            <input type="text" name="toSysName" placeholder="请输入对方系统名称" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">协议类型</label>
+          <div class="layui-input-block">
+            <select name="serviceType" lay-filter="serviceType">
+              <option value=""></option>
+              <option value="WebService">WebService协议</option>
+              <option value="RESTFul" selected>RESTFul风格</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">服务实现类</label>
+          <div class="layui-input-block">
+            <input type="text" name="serviceClass" placeholder="请输入服务实现类" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">事务类型</label>
+          <div class="layui-input-block">
+            <select name="receiveTransactionType" lay-filter="receiveTransactionType">
+              <option value=""></option>
+              <option value="EachData" selected>每条数据</option>
+              <option value="WholeData">整笔数据</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">接收删除值</label>
+          <div class="layui-input-block">
+            <input type="text" name="receiveDeleteFlag" placeholder="请输入接收删除值" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">发送成功值</label>
+          <div class="layui-input-block">
+            <input type="text" name="sendSuccessFlag" placeholder="请输入发送成功值" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">存储过程</label>
+          <div class="layui-input-block">
+            <input type="text" name="dbProc" placeholder="请输入存储过程" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-tree">
+            <div id="permissionTree"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button type="button" class="layui-btn" lay-submit="" lay-filter="submit">保存</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="/layui/layui.js"></script>
+  <script src="/js/layui.config.js"></script>
+  <script>
+    layui.use(['form', 'myajax'], function (form) {
+      var form = layui.form;
+      var myajax = layui.myajax;
+      console.log(parent);
+      var data = parent.mydata;
+      if (data != null) {
+        form.val('dataform', {
+          id: data.id,
+          groupCode: data.groupCode,
+          groupName: data.groupName,
+          groupNameZh: data.groupNameZh,
+          toSysName: data.toSysName,
+          serviceType: data.serviceType,
+          serviceClass: data.serviceClass,
+          receiveTransactionType: data.receiveTransactionType,
+          receiveDeleteFlag: data.receiveDeleteFlag,
+          sendSuccessFlag: data.sendSuccessFlag,
+          dbProc: data.dbProc,
+        });
+      }
+      form.render();
+      form.on('submit(submit)', function (data) {
+        if (data.field.id === undefined || data.field.id === null || data.field.id === '') {
+          myajax.sendpost('/esb/ifGroup', data.field, function (res) {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layui.table.reload('dataTable');
+            parent.layer.close(index);
+          });
+        } else {
+          myajax.sendput('/esb/ifGroup', data.field, function (res) {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layui.table.reload('dataTable');
+            parent.layer.close(index);
+          });
+        }
+      });
+    });
+  </script>
+</html>

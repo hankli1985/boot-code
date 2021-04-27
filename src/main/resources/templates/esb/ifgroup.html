@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/custom.form.css" />
+  </head>
+  <body>
+    <div class="data_table">
+      <div id="searchParam" shiro:hasPermission="sys:role:list">
+        <div class="layui-form-item">
+          <div class="layui-input-inline">
+            <input type="text" id="groupCode" class="layui-input" autocomplete="off" placeholder="请输入接口组别代码" />
+          </div>
+          <div class="layui-input-inline">
+            <input type="text" id="groupName" class="layui-input" autocomplete="off" placeholder="请输入接口组别名称" />
+          </div>
+          <div class="layui-input-inline">
+            <input type="text" id="toSysName" class="layui-input" autocomplete="off" placeholder="请输入对方系统代码" />
+          </div>
+          <div class="layui-input-inline layui-form">
+            <select id="serviceType">
+              <option value="">请选择协议类型</option>
+              <option value="WebService">WebService协议</option>
+              <option value="RESTFul">RESTFul风格</option>
+            </select>
+          </div>
+          <div class="layui-input-inline">
+            <button class="layui-btn" id="search">查询</button>
+          </div>
+        </div>
+      </div>
+      <table class="layui-table" id="dataTable" lay-filter="dataTable"></table>
+    </div>
+    <div id="layerSelect" style="display: none"></div>
+  </body>
+  <script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="addData" shiro:hasPermission="sys:role:add">添加</button>
+    </div>
+  </script>
+  <script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs" lay-event="editData" shiro:hasPermission="sys:role:update">编辑</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="editParam" shiro:hasPermission="sys:role:update">参数配置</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delData" shiro:hasPermission="sys:role:deleted">删除</a>
+  </script>
+  <script src="/layui/layui.js"></script>
+  <script src="/js/layui.config.js"></script>
+  <script type="module" th:inline="none">
+    import { ifGroupCols } from '/js/cols.table.js';
+    layui.use(['jquery', 'table', 'element', 'layer', 'myajax'], function ($, table, element, layer) {
+      var myajax = layui.myajax;
+      //加载主数据表格
+      table.render({
+        id: 'dataTable',
+        elem: '#dataTable',
+        contentType: 'application/json',
+        headers: {
+          authorization: layui.data('LocalData').access_token,
+        },
+        page: true,
+        url: '/esb/ifGroups',
+        method: 'POST',
+        parseData: function (res) {
+          return {
+            code: res.code,
+            msg: res.msg,
+            count: typeof res.data == 'undefined' ? 0 : res.data.total,
+            data: typeof res.data == 'undefined' ? null : res.data.records,
+          };
+        },
+        cols: [[...ifGroupCols]],
+        toolbar: '#toolbar',
+      });
+      // 主数据表格查询;
+      $('#search').click(function () {
+        table.reload('dataTable', {
+          where: {
+            groupCode: $('#groupCode').val(),
+            groupName: $('#groupName').val(),
+            toSysName: $('#toSysName').val(),
+            serviceType: $('#serviceType').val(),
+          },
+          page: {
+            curr: 1,
+          },
+        });
+      });
+      //主数据表格新增按钮
+      table.on('toolbar(dataTable)', function (obj) {
+        switch (obj.event) {
+          case 'addData':
+            window.mydata = null;
+            layer.open({
+              type: 2,
+              title: '新增接口组别',
+              area: ['750px', '550px'],
+              content: '/index/ifgroup_opr.html',
+            });
+            break;
+        }
+      });
+      //主表格数据表格编辑和删除按钮
+      table.on('tool(dataTable)', function (obj) {
+        var data = obj.data;
+        switch (obj.event) {
+          case 'delData':
+            layer.open({
+              content: '确定要删除' + data.groupCode + '(' + data.id + ')' + '发送接口吗?',
+              yes: function (index) {
+                layer.close(index);
+                myajax.senddel('/esb/ifGroup', data.id, function (res) {
+                  layer.msg(res.msg);
+                  table.reload('dataTable');
+                });
+              },
+            });
+            break;
+          case 'editData':
+            window.mydata = data;
+            layer.open({
+              type: 2,
+              title: '编辑接口组别:' + data.groupCode,
+              area: ['750px', '550px'],
+              content: '/index/ifgroup_opr.html',
+            });
+            break;
+          case 'editParam':
+            window.mydata = data;
+            layer.open({
+              type: 2,
+              title: '编辑接口组别:' + data.groupCode + ' 参数',
+              area: ['900px', '600px'],
+              content: '/index/ifgroup_param.html',
+            });
+            break;
+        }
+      });
+      // // 按钮返回
+      // $('#btn_cancel').click(function () {
+      //   $('.data_table').show();
+      //   $('.data_form').hide();
+      //   table.reload('dataTable');
+      //   return false;
+      // });
+    });
+  </script>
+</html>

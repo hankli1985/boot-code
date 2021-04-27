@@ -1,0 +1,19 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "10.68.15.8",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "myesb",
+      "database": "myesb",
+      "username": "myesb",
+      "password": "myesb"
+    }
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.dependency.syncWithFolderExplorer": false
+}
